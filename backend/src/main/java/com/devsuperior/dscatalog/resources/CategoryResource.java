@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -32,6 +33,14 @@ public class CategoryResource {
 		//Retornar a lista no corpo da resposta http desta requisição
 		//.ok = resposta 200
 		return ResponseEntity.ok().body(list);
+	}
+	
+	//Endpoint para buscar as categorias por id
+	//@PathVariable = pra associar o {id} da rota com o id que virá como parametro no método
+	@GetMapping(value = "/{id}")
+	public ResponseEntity<CategoryDTO> findById(@PathVariable Long id) {
+		CategoryDTO dto = categoryService.findById(id);
+		return ResponseEntity.ok().body(dto);
 	}
 
 }

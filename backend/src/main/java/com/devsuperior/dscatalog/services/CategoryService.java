@@ -1,6 +1,7 @@
 package com.devsuperior.dscatalog.services;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.devsuperior.dscatalog.dto.CategoryDTO;
 import com.devsuperior.dscatalog.entities.Category;
 import com.devsuperior.dscatalog.repositories.CategoryRepository;
+import com.devsuperior.dscatalog.services.exceptions.EntityNotFoundException;
 
 @Service
 public class CategoryService {
@@ -36,7 +38,18 @@ public class CategoryService {
 //		for(Category cat : list) {
 //			listDto.add(new CategoryDTO(cat));
 //		}
-		
+	}
+	
+	@Transactional(readOnly = true)
+	public CategoryDTO findById(Long id) {
+		//Optional = evita trabalhar com valor null
+		//O retorno de um Optional nunca será null, porém pode conter ou não categorias dentro dele
+		Optional<Category> obj = categoryRepository.findById(id);
+		//.get = obtem o objeto que está dentro do optional
+		//orElseTrhow = se não encontrar uma entidade retorna uma exception
+		Category entity = obj.orElseThrow(() -> new EntityNotFoundException("Entidade não encontrada"));
+		CategoryDTO dto = new CategoryDTO(entity);
+		return dto;
 	}
 
 }
