@@ -1,14 +1,15 @@
 package com.devsuperior.dscatalog.resources;
 
-import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.devsuperior.dscatalog.entities.Category;
+import com.devsuperior.dscatalog.services.CategoryService;
 
 //Está classe é um recurso da entidade Category
 //Disponibiliza os recursos da aplicação relacionados a Category de acordo com as requisições solicitadas
@@ -19,14 +20,15 @@ import com.devsuperior.dscatalog.entities.Category;
 @RequestMapping(value = "/categories")
 public class CategoryResource {
 	
+	@Autowired
+	private CategoryService categoryService;
+	
 	//Endpoint para buscar todas as categorias
 	//RespondeEntity = objeto do spring que encapsula uma resposta http
 	//<> Tipo do dado que estará no corpo dessa resposta
 	@GetMapping
 	public ResponseEntity<List<Category>> findAll() {
-		List<Category> list = new ArrayList<>(); 
-		list.add(new Category(1L, "Books"));
-		list.add(new Category(2L, "Electronics"));
+		List<Category> list = categoryService.findAll();
 		//Retornar a lista no corpo da resposta http desta requisição
 		//.ok = resposta 200
 		return ResponseEntity.ok().body(list);

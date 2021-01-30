@@ -2,12 +2,26 @@ package com.devsuperior.dscatalog.entities;
 
 import java.io.Serializable;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+//Classe que se refere a uma entidade/tabela no BD
+@Entity
+//Nome da tabela
+@Table(name = "tb_category")
 public class Category implements Serializable{
 	
 	//Padrão da linguagem Java para que o objeto java possa ser convertido em sequência de bytes
 	//Para o objeto poder ser gravado em arquivos, passar nas redes
 	private static final long serialVersionUID = 1L;
 	
+	//Chave primária
+	@Id
+	//Chave primário automaticamente incrementável no BD
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	private String name;
 	
