@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -49,15 +50,23 @@ public class CategoryResource {
 	
 	//Endpoint para inserir numa categoria
 	//@PostMapping = no padrão request ao inserir um novo recurso se usa o método post
-	//@RequestBody = para que o endpoint reconheça que o objeto que será enviado na requisição case com o CategoryDTO dto
+	//@RequestBody = para que o endpoint reconheça que o objeto que será enviado na requisição (corpo da requisição) case com o CategoryDTO dto
 	@PostMapping
 	public ResponseEntity<CategoryDTO> insert(@RequestBody CategoryDTO dto) {
 		dto = categoryService.insert(dto);
 		//Criação de um parâmetro adicional no cabeçalho da resposta com o endereço desse novo recurso criado (padrão REST)
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(dto.getId()).toUri();
 		//.created(uri) = código 201 = recurso criado
-		return ResponseEntity.created(uri).body(dto);
-		
+		return ResponseEntity.created(uri).body(dto);		
+	}
+	
+	
+	//Endpoint para atualizar uma categoria
+	//Se utiliza o método Put
+	@PutMapping(value = "/{id}")
+	public ResponseEntity<CategoryDTO> update(@PathVariable Long id, @RequestBody CategoryDTO dto) {
+		dto = categoryService.update(id, dto);
+		return ResponseEntity.ok().body(dto);		
 	}
 
 }

@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import javax.persistence.EntityNotFoundException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -11,7 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.devsuperior.dscatalog.dto.CategoryDTO;
 import com.devsuperior.dscatalog.entities.Category;
 import com.devsuperior.dscatalog.repositories.CategoryRepository;
-import com.devsuperior.dscatalog.services.exceptions.EntityNotFoundException;
+import com.devsuperior.dscatalog.services.exceptions.ResourceNotFoundException;
 
 @Service
 public class CategoryService {
@@ -47,7 +49,7 @@ public class CategoryService {
 		Optional<Category> obj = categoryRepository.findById(id);
 		//.get = obtem o objeto que está dentro do optional
 		//orElseTrhow = se não encontrar uma entidade retorna uma exception
-		Category entity = obj.orElseThrow(() -> new EntityNotFoundException("Entidade não encontrada"));
+		Category entity = obj.orElseThrow(() -> new ResourceNotFoundException("Entity not found"));
 		CategoryDTO dto = new CategoryDTO(entity);
 		return dto;
 	}
@@ -59,6 +61,19 @@ public class CategoryService {
 		//.save retorna uma referência para a entidade salva
 		entity = categoryRepository.save(entity);
 		return new CategoryDTO(entity);
+	}
+
+	@Transactional
+	public CategoryDTO update(Long id, CategoryDTO dto) {
+		try {
+			//.getOne não vai até o BD, ele apenas instancia um objeto provisório com os dados, os utilizado no BD na hora de realizar o comando final (update)
+			Category entity = categoryRepository.getOne(id);
+			entity.setName(dto.getName());
+			entity = categoryRepository.save(entity);
+			return new CategoryDTO(entity);			
+		} catch(EntityNotFoundException e) {
+			throw new ResourceNotFoundException("Id not found " + id);
+		}
 	}
 
 }
