@@ -7,12 +7,14 @@ import java.util.stream.Collectors;
 import javax.persistence.EntityNotFoundException;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.devsuperior.dscatalog.dto.CategoryDTO;
 import com.devsuperior.dscatalog.entities.Category;
 import com.devsuperior.dscatalog.repositories.CategoryRepository;
+import com.devsuperior.dscatalog.services.exceptions.DatabaseException;
 import com.devsuperior.dscatalog.services.exceptions.ResourceNotFoundException;
 
 @Service
@@ -73,6 +75,19 @@ public class CategoryService {
 			return new CategoryDTO(entity);			
 		} catch(EntityNotFoundException e) {
 			throw new ResourceNotFoundException("Id not found " + id);
+		}
+	}
+
+	//Não se utiliza o @Transactional porque é indicado utilizar uma excessão vinda do BD, e se o utilizar nao consegue capturar a mesma
+	public void delete(Long id) {
+		try {
+			categoryRepository.deleteById(id);
+		} catch(EmptyResultDataAccessException e) {
+			//Caso não encontre o id inserido
+			throw new ResourceNotFoundException("Id not found " + id);
+		} catch(DatabaseException e) {
+			//Caso a categoria com esse id nao possa ser deletada, por possuir produtos cadastrados nesta categoria por exemplo
+			throw new DatabaseException("Integrity violation");
 		}
 	}
 

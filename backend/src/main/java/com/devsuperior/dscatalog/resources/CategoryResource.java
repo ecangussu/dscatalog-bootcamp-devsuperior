@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -30,6 +31,7 @@ public class CategoryResource {
 	private CategoryService categoryService;
 	
 	//Endpoint para buscar todas as categorias
+	//Get = padrão rest para buscar uma categoria
 	//RespondeEntity = objeto do spring que encapsula uma resposta http
 	//<> Tipo do dado que estará no corpo dessa resposta
 	@GetMapping
@@ -49,7 +51,7 @@ public class CategoryResource {
 	}
 	
 	//Endpoint para inserir numa categoria
-	//@PostMapping = no padrão request ao inserir um novo recurso se usa o método post
+	//Post = no padrão rest ao inserir um novo recurso se usa o método post
 	//@RequestBody = para que o endpoint reconheça que o objeto que será enviado na requisição (corpo da requisição) case com o CategoryDTO dto
 	@PostMapping
 	public ResponseEntity<CategoryDTO> insert(@RequestBody CategoryDTO dto) {
@@ -67,6 +69,15 @@ public class CategoryResource {
 	public ResponseEntity<CategoryDTO> update(@PathVariable Long id, @RequestBody CategoryDTO dto) {
 		dto = categoryService.update(id, dto);
 		return ResponseEntity.ok().body(dto);		
+	}
+	
+	//Endpoint para deletar uma categoria
+	//Se utiliza o método Delete
+	@DeleteMapping(value = "/{id}")
+	public ResponseEntity<CategoryDTO> delete(@PathVariable Long id) {
+		categoryService.delete(id);
+		//Resposta 204 = código HTTP que indica que resposta deu certo = corpo da resposta está vazio
+		return ResponseEntity.noContent().build();		
 	}
 
 }
