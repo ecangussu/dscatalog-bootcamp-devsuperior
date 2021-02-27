@@ -38,7 +38,7 @@ public class CategoryResource {
 	//RespondeEntity = objeto do spring que encapsula uma resposta http
 	//<> Tipo do dado que estará no corpo dessa resposta
 	@GetMapping
-	public ResponseEntity<Page<CategoryDTO>> findAll(@RequestParam(value = "page", defaultValue = "0") Integer page,
+	public ResponseEntity<Page<CategoryDTO>> findAllPaged(@RequestParam(value = "page", defaultValue = "0") Integer page,
 			@RequestParam(value = "linesPerPage", defaultValue = "12") Integer linesPerPage,
 			@RequestParam(value = "direction", defaultValue = "ASC") String direction,
 			@RequestParam(value = "orderBy", defaultValue = "name") String orderBy) {
