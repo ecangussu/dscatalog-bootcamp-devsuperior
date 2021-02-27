@@ -78,7 +78,7 @@ public class CategoryService {
 		}
 	}
 
-	//Não se utiliza o @Transactional porque é indicado utilizar uma excessão vinda do BD, e se o utilizar nao consegue capturar a mesma
+	//Não se utiliza o @Transactional porque é indicado utilizar uma excecão vinda do BD, e se o utilizar nao consegue capturar a mesma
 	public void delete(Long id) {
 		try {
 			categoryRepository.deleteById(id);
