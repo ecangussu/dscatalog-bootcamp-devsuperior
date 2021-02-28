@@ -66,7 +66,7 @@ public class CategoryService {
 	@Transactional
 	public CategoryDTO update(Long id, CategoryDTO dto) {
 		try {
-			//.getOne não vai até o BD, ele apenas instancia um objeto provisório com os dados, os utilizado no BD na hora de realizar o comando final (update)
+			//.getOne não vai até o BD, ele apenas instancia um objeto provisório com os dados, os utilizando no BD na hora de realizar o comando final (update)
 			Category entity = categoryRepository.getOne(id);
 			entity.setName(dto.getName());
 			entity = categoryRepository.save(entity);
