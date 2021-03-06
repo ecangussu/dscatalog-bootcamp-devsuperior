@@ -1,0 +1,15 @@
+//Arquivo responsável por definir as cores/temas globais da aplicação
+
+//Alterando a cor primaria
+$theme-colors: (
+  "primary": #407BFF
+);
+
+//Cor do fundo
+$body-bg: #E5E5E5;
+
+//Cor do texto
+$body-color: #263238;
+
+//Importa o bootstrap - pode remover o import do index
+@import '~bootstrap/scss/bootstrap.scss';
